@@ -10,8 +10,8 @@ using UnityEditor.iOS.Xcode;
 
 namespace AdvancedInputFieldPlugin.Editor
 {
-	public class PostProcessBuild
-	{
+    public class PostProcessBuild
+    {
 #if UNITY_IOS
 		[PostProcessBuild]
 		public static void OnPostprocessBuild(BuildTarget buildTarget, string path)
@@ -29,11 +29,13 @@ namespace AdvancedInputFieldPlugin.Editor
 #else
 				string target = project.TargetGuidByName(PBXProject.GetUnityTargetName()); //Use this line for older versions of Unity
 #endif
-				project.AddBuildProperty(target, "OTHER_LDFLAGS", "-force_load $(PROJECT_DIR)/Libraries/AdvancedInputField/Plugins/iOS/NativeKeyboard.a");
-				project.WriteToFile(projectPath);
+                // NOTE: Had to change this so that the xCode project looks in the correct location to link the library
+                // otherwise building fails.
+                project.AddBuildProperty(target, "OTHER_LDFLAGS", "-force_load $(PROJECT_DIR)/Libraries/BindyStreet.Kit.Unity/Plugins/AdvancedInputField/Plugins/iOS/NativeKeyboard.a");
+                project.WriteToFile(projectPath);
 			}
-		}
+    	}
 #endif
-	}
+    }
 }
 
